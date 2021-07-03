@@ -1,19 +1,46 @@
-# embrio4-service
+# Project Title
 
-Back-end services to process EMBRIO - 4
+## Table of Contents
 
-Prequisites
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [Contributing](../CONTRIBUTING.md)
 
-Install Go version 1.13 Install postgresql Create a postgresql DB named embrio4
+## About <a name = "about"></a>
 
-Import SQL dump (ask me for the sql file)
+Write about 1-2 paragraphs describing the purpose of your project.
 
-Environment Variables Fill the .env files with appropriate value according to your local setup DB_USERNAME= DB_PASSWORD= DB_CONNECTION=tcp DB_HOST= DB_PORT= DB_NAME=smehub
+## Getting Started <a name = "getting_started"></a>
 
-PORT=8081
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
-Installation Before install & run, please make sure port 80 is available make start
+### Prerequisites
 
-Contributing Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+What things you need to install the software and how to install them.
 
-License MIT
+```
+Give examples
+```
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running.
+
+Say what the step will be
+
+```
+Give the example
+```
+
+And repeat
+
+```
+until finished
+```
+
+End with an example of getting some data out of the system or using it for a little demo.
+
+## Usage <a name = "usage"></a>
+
+Add notes about how to use the system.
