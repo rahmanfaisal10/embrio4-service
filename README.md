@@ -1,46 +1,39 @@
-# Project Title
+# Embrio 4
 
-## Table of Contents
+Back-end services to process EMBRIO - 4
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
 
-## About <a name = "about"></a>
+## Prequisites
+- install Go version 1.13
+- install postgresql
+- Create a Postgresql
+- Import SQL dump (ask me for the sql file)
 
-Write about 1-2 paragraphs describing the purpose of your project.
 
-## Getting Started <a name = "getting_started"></a>
+## Environment Variables
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+Fill the `.env` files with appropriate value according to your local setup
 
-### Prerequisites
+```bash
+DB_USERNAME=
+DB_PASSWORD=
+DB_CONNECTION=tcp
+DB_HOST=
+DB_PORT=
+DB_NAME=embrio4
 
-What things you need to install the software and how to install them.
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
+PORT=8081
 ```
 
-And repeat
+## Installation
+Before install & run, please make sure port 80 is available
 
+```bash
+make start
 ```
-until finished
-```
 
-End with an example of getting some data out of the system or using it for a little demo.
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-## Usage <a name = "usage"></a>
+Please make sure to update tests as appropriate.
 
-Add notes about how to use the system.
