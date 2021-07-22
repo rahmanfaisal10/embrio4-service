@@ -8,11 +8,9 @@ type LoginRequest struct {
 }
 
 type JwtCustomClaims struct {
-	UserID     string `json:"user_id"`
+	ID         string `json:"id"`
 	UsernamePN string `json:"username_pn"`
 	Nama       string `json:"nama"`
-	UnitKerja  string `json:"unit_kerja"`
-	KodeBranch string `json:"kode_branch"`
-	Jabatan    string `json:"jabatan"`
+	Groups     string `json:"groups"`
 	jwt.StandardClaims
 }

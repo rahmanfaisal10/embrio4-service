@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"rahmanfaisal10/embrio4-service/config"
+	"rahmanfaisal10/embrio4-service/pkg/request"
 	"rahmanfaisal10/embrio4-service/pkg/service"
 	"rahmanfaisal10/embrio4-service/pkg/util"
 
@@ -10,12 +12,12 @@ import (
 )
 
 func InitRouter(s service.Service) *echo.Echo {
-	// cfg := config.Get()
+	cfg := config.Get()
 
-	// middleWareConfig := middleware.JWTConfig{
-	// 	SigningKey: []byte(cfg.SecretKey),
-	// 	Claims:     &request.JwtCustomClaims{},
-	// }
+	middleWareConfig := middleware.JWTConfig{
+		SigningKey: []byte(cfg.SecretKey),
+		Claims:     &request.JwtCustomClaims{},
+	}
 
 	router := echo.New()
 	router.Use(middleware.CORS(), middleware.Logger())
@@ -24,11 +26,13 @@ func InitRouter(s service.Service) *echo.Echo {
 	router.Validator = &util.Validator{Validator: validator.New()}
 
 	//router without authorization and authentication
-	router.POST("api/v1/login", loginHandler(s))
-	router.POST("api/v1/register", registerHandler(s))
+	router.POST("api/login", loginHandler(s))
+	// router.POST("api/v1/register", registerHandler(s))
 
-	// authorizedRouter := router.Group("/api/v1/")
-	// authorizedRouter.Use(middleware.JWTWithConfig(middleWareConfig))
+	authorizedRouter := router.Group("/api/v1/")
+	authorizedRouter.Use(middleware.JWTWithConfig(middleWareConfig))
+
+	authorizedRouter.POST("register", registerHandler(s))
 
 	return router
 }

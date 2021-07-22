@@ -4,18 +4,24 @@ import (
 	"fmt"
 	"rahmanfaisal10/embrio4-service/config"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
-	_ "github.com/lib/pq"
 )
 
 func DBConnection() *sqlx.DB {
 	cfg := config.Get()
 
-	connection := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		cfg.DBHost, cfg.DBPort, cfg.DBUsername, cfg.DBPassword, cfg.DBName)
+	connection := fmt.Sprintf("%s:%s@%s(%s:%s)/%s?charset=utf8mb4&parseTime=true",
+		cfg.DBUsername,
+		cfg.DBPassword,
+		cfg.DBConnection,
+		cfg.DBHost,
+		cfg.DBPort,
+		cfg.DBName,
+	)
 
-	db, err := sqlx.Connect("postgres", connection)
+	db, err := sqlx.Connect("mysql", connection)
 	if err != nil {
 		log.Fatal(err)
 	}

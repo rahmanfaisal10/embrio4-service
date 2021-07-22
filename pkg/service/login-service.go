@@ -5,16 +5,19 @@ import (
 	"rahmanfaisal10/embrio4-service/config"
 	"rahmanfaisal10/embrio4-service/pkg/request"
 	"rahmanfaisal10/embrio4-service/pkg/response"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/gommon/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s service) LoginService(req request.LoginRequest) (*response.LoginResponse, error) {
+func (s *service) LoginService(req request.LoginRequest) (*response.LoginResponse, error) {
 	//get user profile by username Pn
 	user, err := s.r.GetUserByUsernamePN(req.UsernamePN)
 	if err != nil || user == nil {
+		log.Error(err)
 		err = errors.New("wrong username pengawai number")
 		return nil, err
 	}
@@ -27,15 +30,11 @@ func (s service) LoginService(req request.LoginRequest) (*response.LoginResponse
 
 	//set token in claims
 	claims := &request.JwtCustomClaims{
-		UserID:     user.UserID,
-		UsernamePN: user.UsernamePN,
-		Nama:       user.Nama,
-		UnitKerja:  user.UnitKerja,
-		KodeBranch: user.KodeBranch,
-		Jabatan:    user.Jabatan,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 8).Unix(),
-		},
+		ID:             strconv.Itoa(user.ID),
+		UsernamePN:     user.UsernamePN,
+		Nama:           user.Nama,
+		Groups:         user.Groups,
+		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 8).Unix()},
 	}
 
 	//create token

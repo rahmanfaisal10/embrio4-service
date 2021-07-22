@@ -3,17 +3,13 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 )
 
 func (r repository) GetUserByUsernamePN(usernamePN string) (*model.Users, error) {
 	user := new(model.Users)
-	query := `SELECT * FROM users WHERE username_pn = $1`
+	query := `SELECT * FROM users WHERE username_pn = ?`
 	err := r.db.Get(user, query, usernamePN)
-	fmt.Println(user)
-	fmt.Println()
-	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +17,7 @@ func (r repository) GetUserByUsernamePN(usernamePN string) (*model.Users, error)
 }
 
 func (r repository) UpdateLastLogin(user model.Users) error {
-	queryUpdate := `UPDATE users SET last_login = NOW() WHERE username_pn=$1`
+	queryUpdate := `UPDATE users SET last_login = NOW() WHERE username_pn=?`
 	_, err := r.db.Exec(queryUpdate, user.UsernamePN)
 	if err != nil && err != sql.ErrNoRows {
 		return err
@@ -30,8 +26,8 @@ func (r repository) UpdateLastLogin(user model.Users) error {
 }
 
 func (r repository) CreateUser(user *model.Users) error {
-	query := `INSERT INTO public.users(user_id, username_pn, password, nama, unit_kerja, kode_branch, jabatan, created_at, created_by, updated_at, updated_by)
-			VALUES (:user_id, :username_pn, :password, :nama, :unit_kerja, :kode_branch, :jabatan, NOW(), 'admin', NOW(), 'admin');`
+	query := `INSERT INTO users(username_pn, password, nama, unit_kerja, kode_branch, jabatan, created_at, created_by, updated_at, updated_by, last_login, groups, phone_number)
+			VALUES ( :username_pn, :password, :nama, :unit_kerja, :kode_branch, :jabatan, NOW(), 'admin', NOW(), 'admin', :last_login, :groups, :phone_number);`
 
 	_, err := r.db.NamedExec(query, user)
 	if err != nil {

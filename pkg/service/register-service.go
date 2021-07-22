@@ -2,14 +2,37 @@ package service
 
 import (
 	"errors"
+	"rahmanfaisal10/embrio4-service/config"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 	"rahmanfaisal10/embrio4-service/pkg/request"
-	"rahmanfaisal10/embrio4-service/pkg/util"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/gommon/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s service) RegisterService(request request.RegisterRequest) error {
+const (
+	BEARERREMOVE = "Bearer "
+)
+
+func (s *service) RegisterService(request request.RegisterRequest, tokenReq string) error {
+	//authorization
+	cfg := config.Get()
+	claims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(strings.TrimPrefix(tokenReq, BEARERREMOVE), claims, func(t *jwt.Token) (interface{}, error) {
+		return []byte(cfg.SecretKey), nil
+	})
+
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	if claims["groups"] != "admin" {
+		return errors.New("you do not have access to create users")
+	}
+
 	//checking data is exist on database
 	user, _ := s.r.GetUserByUsernamePN(request.UsernamePN)
 	if user != nil {
@@ -18,19 +41,20 @@ func (s service) RegisterService(request request.RegisterRequest) error {
 	}
 
 	//generate from request password
-	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.MinCost)
+	password, err := bcrypt.GenerateFromPassword([]byte(request.UsernamePN), bcrypt.MinCost)
 	if err != nil {
 		return err
 	}
 
 	newUser := &model.Users{
-		UserID:     util.GeneratorString(6),
+		ID:         0,
 		UsernamePN: request.UsernamePN,
 		Password:   string(password),
 		Nama:       request.Nama,
 		UnitKerja:  request.UnitKerja,
 		KodeBranch: request.KodeBranch,
 		Jabatan:    request.Jabatan,
+		Groups:     request.Groups,
 	}
 
 	err = s.r.CreateUser(newUser)

@@ -8,7 +8,7 @@ import (
 
 type Service interface {
 	LoginService(req request.LoginRequest) (*response.LoginResponse, error)
-	RegisterService(request request.RegisterRequest) error
+	RegisterService(request request.RegisterRequest, tokenString string) error
 }
 
 type service struct {
