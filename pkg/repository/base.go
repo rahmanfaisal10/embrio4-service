@@ -10,6 +10,7 @@ type Repository interface {
 	GetUserByUsernamePN(usernamePN string) (*model.Users, error)
 	UpdateLastLogin(user model.Users) error
 	CreateUser(user *model.Users) error
+	UpdatePassword(user model.Users) error
 }
 
 type repository struct {
