@@ -5,6 +5,7 @@
 *.so
 *.dylib
 idea
+bin
 vendor
 
 # Test binary, built with `go test -c`
