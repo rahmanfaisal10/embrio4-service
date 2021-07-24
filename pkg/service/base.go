@@ -10,6 +10,7 @@ type Service interface {
 	LoginService(req request.LoginRequest) (*response.LoginResponse, error)
 	RegisterService(request request.RegisterRequest, tokenString string) error
 	EmailVerificationService(request request.EmailVerificationRequest) *response.BaseResponse
+	ChangedPasswordService(request request.ChangePasswordRequest) *response.BaseResponse
 }
 
 type service struct {

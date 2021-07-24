@@ -29,6 +29,16 @@ func (s *service) EmailVerificationService(request request.EmailVerificationRequ
 		}
 	}
 
+	//check username
+	_, err := s.r.GetUserByUsernamePN(request.UsernamePN)
+	if err != nil {
+		log.Error(err)
+		return &response.BaseResponse{
+			Success: false,
+			Message: err.Error(),
+		}
+	}
+
 	//send to email
 	cfg := config.Get()
 	message := fmt.Sprintf("please, change password with click this url: \n %s?username_pn=%s", URL, request.UsernamePN)

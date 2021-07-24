@@ -33,6 +33,7 @@ func InitRouter(s service.Service) *echo.Echo {
 	authorizedRouter.Use(middleware.JWTWithConfig(middleWareConfig))
 	authorizedRouter.POST("email-verification", emailVerificationHandler(s))
 	authorizedRouter.POST("register", registerHandler(s))
+	authorizedRouter.PUT("change-password", changePasswordHandler(s))
 
 	return router
 }

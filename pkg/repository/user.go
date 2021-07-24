@@ -38,8 +38,8 @@ func (r *repository) CreateUser(user *model.Users) error {
 }
 
 func (r *repository) UpdatePassword(user model.Users) error {
-	queryUpdate := `UPDATE users SET password = :password WHERE username_pn= :username_pn`
-	_, err := r.db.Exec(queryUpdate, user)
+	queryUpdate := `UPDATE users SET password = ?, updated_at = NOW() WHERE username_pn= ?`
+	_, err := r.db.Exec(queryUpdate, user.Password, user.UsernamePN)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
