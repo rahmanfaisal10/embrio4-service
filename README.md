@@ -4,9 +4,9 @@ Back-end services to process EMBRIO - 4
 
 
 ## Prequisites
-- install Go version 1.13
-- install postgresql
-- Create a Postgresql
+- install Go version 1.13 or latest
+- install mysql
+- Create a database embrio4
 - Import SQL dump (ask me for the sql file)
 
 
@@ -15,18 +15,26 @@ Back-end services to process EMBRIO - 4
 Fill the `.env` files with appropriate value according to your local setup
 
 ```bash
-DB_USERNAME=
+DB_USERNAME=root
 DB_PASSWORD=
 DB_CONNECTION=tcp
 DB_HOST=
 DB_PORT=
 DB_NAME=embrio4
 
-PORT=8081
+PORT=
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+EMAIL=
+MAILPASSWORD=
+
+SECRET_KEY=embrio4
+
 ```
 
 ## Installation
-Before install & run, please make sure port 80 is available
+Before install & run, please make sure port 80 is available and setup environment with your environment
 
 ```bash
 make start
