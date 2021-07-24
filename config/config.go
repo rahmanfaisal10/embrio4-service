@@ -21,6 +21,10 @@ type Config struct {
 	DBHost       string `envconfig:"DB_HOST"`
 	DBPort       string `envconfig:"DB_PORT"`
 	DBName       string `envconfig:"DB_NAME"`
+	SMTPHost     string `envconfig:"SMTP_HOST"`
+	SMTPPort     int    `envconfig:"SMTP_PORT"`
+	Email        string `envconfig:"EMAIL"`
+	MailPassword string `envconfig:"MAILPASSWORD"`
 
 	Port string `envconfig:"PORT"`
 

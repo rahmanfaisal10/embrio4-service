@@ -28,3 +28,9 @@ func GenerateOTP(length int) (string, error) {
 
 	return string(buffer), nil
 }
+
+func ParseEmailString(req string) []string {
+	return []string{
+		req,
+	}
+}
