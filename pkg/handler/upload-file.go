@@ -31,6 +31,7 @@ func uploadFileHandler(service service.Service) func(c echo.Context) error {
 			resp.Message = err.Error()
 			return c.JSON(http.StatusBadRequest, resp)
 		}
+
 		// Destination
 		dst, err := os.Create("pkg/assets/" + file.Filename)
 		if err != nil {
