@@ -11,6 +11,7 @@ type Service interface {
 	RegisterService(request request.RegisterRequest, tokenString string) error
 	EmailVerificationService(request request.EmailVerificationRequest) *response.BaseResponse
 	ChangedPasswordService(request request.ChangePasswordRequest) *response.BaseResponse
+	ImportFileUploadDWH(destination string) *response.BaseResponse
 }
 
 type service struct {

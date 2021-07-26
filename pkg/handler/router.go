@@ -34,6 +34,7 @@ func InitRouter(s service.Service) *echo.Echo {
 	authorizedRouter.POST("email-verification", emailVerificationHandler(s))
 	authorizedRouter.POST("register", registerHandler(s))
 	authorizedRouter.PUT("change-password", changePasswordHandler(s))
+	authorizedRouter.POST("upload-file", uploadFileHandler(s))
 
 	return router
 }
