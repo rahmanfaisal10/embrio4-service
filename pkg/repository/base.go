@@ -11,8 +11,8 @@ type Repository interface {
 	UpdateLastLogin(user model.Users) error
 	CreateUser(user *model.Users) error
 	UpdatePassword(user model.Users) error
-	BulkUpsertCabang(request []*model.Cabang) ([]*model.Cabang, error)
-	BUlkUpsertMantri(request []*model.Mantri) ([]*model.Mantri, error)
+	// BulkUpsertCabang(request []*model.Cabang) ([]*model.Cabang, error)
+	// BUlkUpsertMantri(request []*model.Mantri) ([]*model.Mantri, error)
 }
 
 type repository struct {

@@ -2,9 +2,9 @@ package model
 
 import "time"
 
-type Mantri struct {
+type Unit struct {
 	ID          int       `json:"id" db:"id"`
-	IDUnit      int       `json:"id_unit" db:"id_unit"`
+	IDCabang    int       `json:"id_cabang" db:"id_cabang"`
 	Kode        string    `json:"kode" db:"kode"`
 	Nama        string    `json:"nama" db:"nama"`
 	Alamat      string    `json:"alamat" db:"alamat"`

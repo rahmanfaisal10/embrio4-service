@@ -1,34 +1,26 @@
 package repository
 
-import (
-	"fmt"
-	"rahmanfaisal10/embrio4-service/pkg/model"
-	"strings"
+// func (repo *repository) BulkUpsertCabang(request []*model.Cabang) ([]*model.Cabang, error) {
+// 	addsQuery := make([]string, 0, len(request))
 
-	"github.com/labstack/gommon/log"
-)
+// 	for _, cabang := range request {
+// 		addsQuery = append(addsQuery, fmt.Sprintf("(SELECT * FROM cabang WHERE cabang = %s)", cabang.Cabang))
+// 	}
 
-func (repo *repository) BulkUpsertCabang(request []*model.Cabang) ([]*model.Cabang, error) {
-	addsQuery := make([]string, 0, len(request))
+// 	if len(request) > 0 {
+// 		query := `INSERT INTO embrio4.cabang (id, cabang, description, created_at, updated_at)` + strings.Join(addsQuery, ",") +
+// 			`ON DUPLICATE KEY UPDATE SET
+// 			cabang = :cabang,
+// 			description = :description,
+// 			updated_at = NOW()
+// 		`
 
-	for _, cabang := range request {
-		addsQuery = append(addsQuery, fmt.Sprintf("(SELECT * FROM cabang WHERE cabang = %s)", cabang.Cabang))
-	}
+// 		_, err := repo.db.Exec(query, request)
+// 		if err != nil {
+// 			log.Error(err)
+// 			return nil, err
+// 		}
+// 	}
 
-	if len(request) > 0 {
-		query := `INSERT INTO embrio4.cabang (id, cabang, description, created_at, updated_at)` + strings.Join(addsQuery, ",") +
-			`ON DUPLICATE KEY UPDATE SET
-			cabang = :cabang,
-			description = :description,
-			updated_at = NOW()
-		`
-
-		_, err := repo.db.Exec(query, request)
-		if err != nil {
-			log.Error(err)
-			return nil, err
-		}
-	}
-
-	return request, nil
-}
+// 	return request, nil
+// }

@@ -2,12 +2,10 @@ package model
 
 import "time"
 
-type Mantri struct {
+type AksiMisi struct {
 	ID          int       `json:"id" db:"id"`
-	IDUnit      int       `json:"id_unit" db:"id_unit"`
-	Kode        string    `json:"kode" db:"kode"`
-	Nama        string    `json:"nama" db:"nama"`
-	Alamat      string    `json:"alamat" db:"alamat"`
+	IDAksi      int       `json:"id_aksi" db:"id_aksi"`
+	IDMisi      int       `json:"id_misi" db:"id_misi"`
 	Description string    `json:"description" db:"description"`
 	CreatedAt   time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
