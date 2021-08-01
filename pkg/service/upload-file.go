@@ -1,7 +1,7 @@
 package service
 
 import (
-	"rahmanfaisal10/embrio4-service/pkg/request"
+	"rahmanfaisal10/embrio4-service/pkg/model"
 	"rahmanfaisal10/embrio4-service/pkg/response"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
@@ -13,7 +13,7 @@ const (
 )
 
 var (
-	uploadFiles = make([]request.FileRequest, 0)
+	uploadModel = make([]*model.Upload, 0)
 )
 
 func (svc *service) ImportFileUploadDWH(destination string) *response.BaseResponse {
@@ -28,50 +28,56 @@ func (svc *service) ImportFileUploadDWH(destination string) *response.BaseRespon
 
 	firstSheet := xlsx.WorkBook.Sheets.Sheet[0].Name
 
-	//get all value in row
-	for _, row := range xlsx.GetRows(firstSheet) {
-		getData := &request.FileRequest{
+	for key, row := range xlsx.GetRows(firstSheet) {
+		//when get title, so loop to next rows
+		if key == 0 {
+			continue
+		}
+		getData := &model.Upload{
 			Periode:                    row[0],
-			Branch:                     row[1],
-			Currency:                   row[2],
-			NamaAO:                     row[3],
-			LNType:                     row[4],
-			NomorRekening:              row[5],
-			NamaDebitur:                row[6],
-			Plafond:                    row[7],
-			NextPmtDate:                row[8],
-			NextIntPmtDate:             row[9],
-			Rate:                       row[10],
-			TglMenunggak:               row[11],
-			TglRealisasi:               row[12],
-			TglJatuhTempo:              row[13],
-			JangkaWaktu:                row[14],
-			FlagRestruk:                row[15],
-			CIFNO:                      row[16],
-			KolektibilitasLancar:       row[17],
-			KolektibilitasDPK:          row[18],
-			KolektibilitasKurangLancar: row[19],
-			KolektibilitasDiragukan:    row[20],
-			KolektibilitasMacet:        row[21],
-			TunggakanPokok:             row[22],
-			TunggakanBunga:             row[23],
-			TunggakanPinalty:           row[24],
-			PN:                         row[25],
-			NamaPN:                     row[26],
-			Code:                       row[27],
-			Description:                row[28],
-			Kol_ADK:                    row[29],
-			AvgOSHarian:                row[30],
-			KecamatanTempatTinggal:     row[31],
-			KelurahanTempatTinggal:     row[32],
-			KodePosTempatTinggal:       row[33],
-			KecamatanTempatUsaha:       row[34],
-			KelurahanTempatUsaha:       row[35],
-			KodePosTempatUsaha:         row[36],
+			Region:                     row[1],
+			Mainbranch:                 row[2],
+			Branch:                     row[3],
+			Currency:                   row[4],
+			NamaAO:                     row[5],
+			LNType:                     row[6],
+			NomorRekening:              row[7],
+			NamaDebitur:                row[8],
+			AlamatIdentitas:            row[9],
+			KodePosIdentitas:           row[10],
+			AlamatKantor:               row[11],
+			KodePosKantor:              row[12],
+			Plafond:                    row[13],
+			NextPmtDate:                row[14],
+			NextIntPmtDate:             row[15],
+			Rate:                       row[16],
+			TglMenunggak:               row[17],
+			TglRealisasi:               row[18],
+			TglJatuhTempo:              row[19],
+			JangkaWaktu:                row[20],
+			FlagRestruk:                row[21],
+			CIFNO:                      row[22],
+			KolektibilitasLancar:       row[23],
+			KolektibilitasDPK:          row[24],
+			KolektibilitasKurangLancar: row[25],
+			KolektibilitasDiragukan:    row[26],
+			KolektibilitasMacet:        row[27],
+			TunggakanPokok:             row[28],
+			TunggakanBunga:             row[29],
+			TunggakanPinalty:           row[30],
+			PNPengelola:                row[31],
+			NamaPengelola:              row[32],
 		}
 
-		//input in array object
-		uploadFiles = append(uploadFiles, *getData)
+		uploadModel = append(uploadModel, getData)
+	}
+
+	err = svc.r.UploadRepository(uploadModel)
+	if err != nil {
+		return &response.BaseResponse{
+			Success: false,
+			Message: err.Error(),
+		}
 	}
 
 	return &response.BaseResponse{

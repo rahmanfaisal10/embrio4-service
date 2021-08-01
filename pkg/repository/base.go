@@ -11,8 +11,12 @@ type Repository interface {
 	UpdateLastLogin(user model.Users) error
 	CreateUser(user *model.Users) error
 	UpdatePassword(user model.Users) error
-	// BulkUpsertCabang(request []*model.Cabang) ([]*model.Cabang, error)
-	// BUlkUpsertMantri(request []*model.Mantri) ([]*model.Mantri, error)
+	BulkUpsertCabang(request []*model.Cabang, tx *sqlx.Tx) ([]*model.Cabang, error)
+	BulkUpsertUnit(request []*model.Unit, tx *sqlx.Tx) ([]*model.Unit, error)
+	BUlkUpsertMantri(request []*model.Mantri, tx *sqlx.Tx) ([]*model.Mantri, error)
+	BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*model.Misi, error)
+	BUlkUpsertNasabah(request []*model.Nasabah, tx *sqlx.Tx) ([]*model.Nasabah, error)
+	UploadRepository(request []*model.Upload) error
 }
 
 type repository struct {
