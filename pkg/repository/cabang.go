@@ -1,16 +1,24 @@
 package repository
 
 import (
+	"database/sql"
 	"fmt"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
 )
 
-func (repo *repository) BulkUpsertCabang(request []*model.Cabang, tx *sqlx.Tx) ([]*model.Cabang, error) {
+func (repo *repository) BulkUpsertCabang(tx *sql.Tx) error {
 	querySelect := `SELECT * FROM cabang c WHERE id=(SELECT max(id) FROM cabang c2);`
-	queryInsert := `INSERT INTO cabang (kode, nama, alamat, description, created_at, updated_at) VALUES %s ON DUPLICATE KEY UPDATE updated_at = NOW();`
+	queryInsert := `INSERT INTO cabang 
+					(kode, nama, alamat, description, created_at, updated_at) 
+					select u.Branch, u.Lancar , u.Lancar , u.Lancar , NOW(), NOW() from upload u
+					ON DUPLICATE KEY UPDATE 
+					nama = value(nama),
+					alamat = value(alamat),
+					description = value(description),
+					updated_at = NOW();`
+
 	queryReset := `ALTER TABLE cabang AUTO_INCREMENT = %d`
 
 	//select last id
@@ -23,27 +31,15 @@ func (repo *repository) BulkUpsertCabang(request []*model.Cabang, tx *sqlx.Tx) (
 	if err != nil {
 		log.Error(err)
 		tx.Rollback()
-		return nil, err
+		return err
 	}
 
-	for _, v := range request {
-		valueStrings := "(?, ?, ?, ?, NOW(), NOW())"
-
-		valueArgss := []interface{}{
-			v.Kode,
-			v.Nama,
-			v.Alamat,
-			v.Description,
-		}
-
-		query := fmt.Sprintf(queryInsert, valueStrings)
-		_, err := tx.Exec(query, valueArgss...)
-		if err != nil {
-			log.Error(err)
-			tx.Rollback()
-			return nil, err
-		}
+	_, err = tx.Exec(queryInsert)
+	if err != nil {
+		log.Error(err)
+		tx.Rollback()
+		return err
 	}
 
-	return request, nil
+	return nil
 }

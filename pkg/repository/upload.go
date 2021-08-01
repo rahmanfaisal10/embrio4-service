@@ -157,6 +157,35 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 		}
 	}
 
+	//insert to other table
+	err = repo.BulkUpsertCabang(tx)
+	if err != nil {
+		tx.Rollback()
+		log.Error(err)
+		return err
+	}
+
+	err = repo.BulkUpsertUnit(tx)
+	if err != nil {
+		tx.Rollback()
+		log.Error(err)
+		return err
+	}
+
+	err = repo.BUlkUpsertNasabah(tx)
+	if err != nil {
+		tx.Rollback()
+		log.Error(err)
+		return err
+	}
+
+	err = repo.BUlkUpsertMantri(tx)
+	if err != nil {
+		tx.Rollback()
+		log.Error(err)
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
@@ -164,7 +193,6 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 		log.Error(err)
 		return err
 	}
-	stmt.Close()
 
 	return nil
 }

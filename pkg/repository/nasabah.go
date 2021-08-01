@@ -1,18 +1,18 @@
 package repository
 
 import (
+	"database/sql"
 	"fmt"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
 )
 
-func (repo *repository) BUlkUpsertNasabah(request []*model.Nasabah, tx *sqlx.Tx) ([]*model.Nasabah, error) {
+func (repo *repository) BUlkUpsertNasabah(tx *sql.Tx) error {
 	querySelect := `SELECT * FROM nasabah n WHERE id=(SELECT max(id) FROM nasabah m2);`
 	queryInsert := `INSERT INTO nasabah (nama, no_ktp, nomor_rekening, cif_no, saldo, no_telepon, nama_ibu_kandung, kode_pos_identitas, alamat_identitas, kode_pos_kantor, alamat_kantor, description, created_at, updated_at)
-					VALUES %s 
-					ON DUPLICATE KEY UPDATE 
+						SELECT u.` + "`Nama Debitur`" + `,  u.Lancar , u.` + "`Nomor rekening`" + `, u.CIFNO, 0, u.Lancar, u.Lancar, u.` + "`Kode Pos Identitas`" + `, u.` + "`Alamat Identitas`" + `, u.` + "`Kode Pos Kantor`" + `, u.` + "`Alamat Kantor`" + `, u.Lancar, NOW(), NOW() FROM upload u 
+						ON DUPLICATE KEY UPDATE 
 						nama = value(nama),
 						saldo = value(saldo),
 						no_telepon = value(no_telepon),
@@ -50,37 +50,15 @@ func (repo *repository) BUlkUpsertNasabah(request []*model.Nasabah, tx *sqlx.Tx)
 	if err != nil {
 		log.Error(err)
 		tx.Rollback()
-		return nil, err
+		return err
 	}
 
-	for _, w := range request {
-
-		valueStrings := "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
-
-		valueArgs := []interface{}{
-			w.Nama,
-			w.NoKtp,
-			w.NomorRekening,
-			w.CifNo,
-			w.Saldo,
-			w.NoTelepon,
-			w.NamaIbuKandung,
-			w.KodePosIdentitas,
-			w.AlamatIdentitas,
-			w.KodePosKantor,
-			w.AlamatKantor,
-			"",
-		}
-
-		query := fmt.Sprintf(queryInsert, valueStrings)
-
-		_, err = tx.Exec(query, valueArgs...)
-		if err != nil {
-			log.Error(err)
-			tx.Rollback()
-			return nil, err
-		}
+	_, err = tx.Exec(queryInsert)
+	if err != nil {
+		log.Error(err)
+		tx.Rollback()
+		return err
 	}
 
-	return request, nil
+	return nil
 }

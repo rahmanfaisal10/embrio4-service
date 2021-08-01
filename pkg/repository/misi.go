@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-func (repo *repository) BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*model.Misi, error) {
+func (repo *repository) BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) error {
 	querySelect := `SELECT * FROM misi m WHERE id=(SELECT max(id) FROM misi m2);`
 	queryInsert := `INSERT INTO misi (id_mantri, kode, nama, description, created_at, updated_at) VALUES %s 
 					ON DUPLICATE KEY UPDATE 
@@ -29,7 +29,7 @@ func (repo *repository) BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*m
 	if err != nil {
 		log.Error(err)
 		tx.Rollback()
-		return nil, err
+		return err
 	}
 
 	valueStrings := []string{}
@@ -41,7 +41,7 @@ func (repo *repository) BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*m
 		err := tx.QueryRow(fmt.Sprintf(queryMantri, v.Description)).Scan(&mantri.ID, &mantri.IDUnit, &mantri.Kode, &mantri.Nama, &mantri.Alamat, &mantri.Description, &mantri.CreatedAt, &mantri.UpdatedAt)
 		if err != nil {
 			log.Error(err)
-			return nil, err
+			return err
 		}
 		valueStrings = append(valueStrings, "(?, ?, ?, ?, NOW(), NOW())")
 
@@ -55,8 +55,8 @@ func (repo *repository) BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*m
 	_, err = tx.Exec(queryInsert, valueArgs...)
 	if err != nil {
 		tx.Rollback()
-		return nil, err
+		return err
 	}
 
-	return request, nil
+	return nil
 }

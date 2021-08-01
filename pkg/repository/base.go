@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 
 	"github.com/jmoiron/sqlx"
@@ -11,11 +12,11 @@ type Repository interface {
 	UpdateLastLogin(user model.Users) error
 	CreateUser(user *model.Users) error
 	UpdatePassword(user model.Users) error
-	BulkUpsertCabang(request []*model.Cabang, tx *sqlx.Tx) ([]*model.Cabang, error)
-	BulkUpsertUnit(request []*model.Unit, tx *sqlx.Tx) ([]*model.Unit, error)
-	BUlkUpsertMantri(request []*model.Mantri, tx *sqlx.Tx) ([]*model.Mantri, error)
-	BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) ([]*model.Misi, error)
-	BUlkUpsertNasabah(request []*model.Nasabah, tx *sqlx.Tx) ([]*model.Nasabah, error)
+	BulkUpsertCabang(tx *sql.Tx) error
+	BulkUpsertUnit(tx *sql.Tx) error
+	BUlkUpsertMantri(tx *sql.Tx) error
+	BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) error
+	BUlkUpsertNasabah(tx *sql.Tx) error
 	UploadRepository(request []*model.Upload) error
 }
 
