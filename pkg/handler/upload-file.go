@@ -2,7 +2,6 @@ package handler
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"rahmanfaisal10/embrio4-service/pkg/response"
@@ -18,7 +17,6 @@ func uploadFileHandler(service service.Service) func(c echo.Context) error {
 		//source
 		file, err := c.FormFile("file")
 		if err != nil {
-			log.Fatal(err)
 			resp.Success = false
 			resp.Message = err.Error()
 			return c.JSON(http.StatusBadRequest, resp)
@@ -26,7 +24,6 @@ func uploadFileHandler(service service.Service) func(c echo.Context) error {
 
 		src, err := file.Open()
 		if err != nil {
-			log.Fatal(err)
 			resp.Success = false
 			resp.Message = err.Error()
 			return c.JSON(http.StatusBadRequest, resp)
@@ -46,7 +43,6 @@ func uploadFileHandler(service service.Service) func(c echo.Context) error {
 
 		respo := service.ImportFileUploadDWH(dst.Name())
 		if !respo.Success {
-			log.Fatal(err)
 			respo.Success = false
 			respo.Message = err.Error()
 			return c.JSON(http.StatusBadRequest, resp)

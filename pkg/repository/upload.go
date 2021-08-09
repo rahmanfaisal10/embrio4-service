@@ -44,41 +44,7 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 		` + "`PN   PENGELOLA`" + `, 
 		` + "`NAMA  PENGELOLA`" + `
 	)
-	VALUES %s
-	ON DUPLICATE KEY UPDATE 
-		Periode	= value(Periode),
-		Region = value(Region),
-		` + "`Main Branch`" + ` = value(` + "`Main Branch`" + `),
-		Branch= value(Branch),
-		Currency = value(Currency),
-		` + "`Nama AO`" + ` = value(` + "`Nama AO`" + `),
-		` + "`LN Type`" + ` = value(` + "`LN Type`" + `),
-		` + "`Nomor rekening`" + ` = value(` + "`Nomor rekening`" + `),
-		` + "`Nama Debitur`" + ` = value(` + "`Nama Debitur`" + `),
-		` + "`Alamat Identitas`" + ` = value(` + "`Alamat Identitas`" + `),
-		` + "`Kode Pos Identitas`" + ` = value(` + "`Kode Pos Identitas`" + `),
-		` + "`Alamat Kantor`" + ` = value(` + "`Alamat Kantor`" + `),
-		` + "`Kode Pos Kantor`" + ` = value(` + "`Kode Pos Kantor`" + `),
-		Plafond = value(Plafond),
-		` + "`Next Pmt Date`" + ` = value(` + "`Next Pmt Date`" + `),
-		` + "`Next Int Pmt Date`" + ` = value(` + "`Next Int Pmt Date`" + `),
-		Rate = value(Rate),
-		` + "`Tgl Menunggak`" + ` = value(` + "`Tgl Menunggak`" + `),
-		` + "`Tgl Realisasi`" + ` = value(` + "`Tgl Realisasi`" + `),
-		` + "`Tgl Jatuh tempo`" + ` = value(` + "`Tgl Jatuh tempo`" + `),
-		` + "`Jangka Waktu`" + ` = value(` + "`Jangka Waktu`" + `),
-		` + "`Flag Restruk`" + ` = value(` + "`Flag Restruk`" + `),
-		CIFNO = value(CIFNO),
-		` + "`Kolektibilitas Lancar`" + ` = value(` + "`Kolektibilitas Lancar`" + `),
-		` + "`Kolektibilitas DPK`" + ` = value(` + "`Kolektibilitas DPK`" + `),
-		` + "`Kolektibilitas Kurang Lancar`" + ` = value(` + "`Kolektibilitas Kurang Lancar`" + `),
-		` + "`Kolektibilitas Diragukan`" + ` = value(` + "`Kolektibilitas Diragukan`" + `),
-		` + "`Kolektibilitas Macet`" + ` = value(` + "`Kolektibilitas Macet`" + `),
-		` + "`Tunggakan Pokok`" + ` = value(` + "`Tunggakan Pokok`" + `),
-		` + "`Tunggakan Bunga`" + ` = value(` + "`Tunggakan Bunga`" + `),
-		` + "`Tunggakan Pinalty`" + ` = value(` + "`Tunggakan Pinalty`" + `),
-		` + "`PN   PENGELOLA`" + ` = value(` + "`PN   PENGELOLA`" + `),
-		` + "`NAMA  PENGELOLA`" + ` = value(` + "`NAMA  PENGELOLA`" + `);`
+	VALUES %s;`
 
 	querySelect := `SELECT id FROM upload m WHERE id=(SELECT max(id) FROM upload m2);`
 	queryReset := `ALTER TABLE upload AUTO_INCREMENT = %d`
@@ -90,7 +56,7 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 	//reset auto increment
 	smtfUpload := fmt.Sprintf(queryReset, upload.ID+1)
 	_, err := repo.db.Exec(smtfUpload)
-	if err != nil {
+	if err != nil {	
 		return err
 	}
 
@@ -155,28 +121,6 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 			log.Error(err)
 			return err
 		}
-	}
-
-	//insert to other table
-	err = repo.BulkUpsertCabang(tx)
-	if err != nil {
-		tx.Rollback()
-		log.Error(err)
-		return err
-	}
-
-	err = repo.BulkUpsertUnit(tx)
-	if err != nil {
-		tx.Rollback()
-		log.Error(err)
-		return err
-	}
-
-	err = repo.BUlkUpsertNasabah(tx)
-	if err != nil {
-		tx.Rollback()
-		log.Error(err)
-		return err
 	}
 
 	err = repo.BUlkUpsertMantri(tx)

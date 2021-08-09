@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"rahmanfaisal10/embrio4-service/pkg/model"
+	"rahmanfaisal10/embrio4-service/pkg/response"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -18,6 +19,11 @@ type Repository interface {
 	BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) error
 	BUlkUpsertNasabah(tx *sql.Tx) error
 	UploadRepository(request []*model.Upload) error
+	QueryTotalOS(mantri string) (totalOS response.TotalOS, err error)
+	QuerySisaSuplesi(mantri string) (sisaSuplesi response.SisaSuplesiResponse, err error)
+	QueryRincianLunasHutang(mantri string) (sisaLunasHutang response.SisaLunasHutangResponse, err error)
+	GetAllMantri() (mantri []*model.Mantri, err error)
+	PencapaianRealisasi(mantri string) (pencapaianRealisasi float64, err error)
 }
 
 type repository struct {
