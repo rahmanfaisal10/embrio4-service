@@ -15,8 +15,8 @@ var (
 func (repo *repository) BUlkUpsertMantri(tx *sql.Tx) error {
 	querySelect := `SELECT * FROM mantri m WHERE id=(SELECT max(id) FROM mantri m2);`
 	queryInsert := `INSERT INTO mantri (id_unit, kode, nama, alamat, description, created_at, updated_at)
-					SELECT c.id, u.` + "`PN   PENGELOLA`" + ` , u.` + "`NAMA  PENGELOLA`" + ` , u.Lancar , u.Lancar , NOW(), NOW() from upload u join unit c on u.` + "`Main Branch`" + ` = c.kode
-					WHERE u.` + "`PN   PENGELOLA`" + `IS NOT NULL and u.` + "`PN   PENGELOLA`" + ` != ''
+					SELECT 0 as id_unit, u.pn_pengelola , u.nama_pengelola , '' as alamat , '' as description , NOW(), NOW() from upload u
+					WHERE u.pn_pengelola IS NOT NULL and u.pn_pengelola != ''
 					ON DUPLICATE KEY UPDATE 
 						nama = value(nama),
 						alamat = value(alamat),

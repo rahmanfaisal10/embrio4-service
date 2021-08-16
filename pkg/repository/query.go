@@ -79,7 +79,7 @@ func (repo *repository) QueryRincianLunasHutang(mantri string) (sisaLunasHutang 
 	SELECT 	COUNT(*) as count, 
 		coalesce(SUM(u.sisa_os),0) as sisa_lunas_hutang, 
 		coalesce(u.` + "`PN   PENGELOLA`" + `,'') as pn_pengelola,
-		u.` + "`Tgl Realisasi`" + ` as tgl_realisasi,
+		u.` + "`Tgl Realisasi`" + ` as tgl_realisasi,chrom
 		coalesce(u.CIFNO,'') as cif_no,
 		u.Periode as periode,
 		coalesce(u.Branch,'') as branch,

@@ -5,8 +5,7 @@ import (
 	"math"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 	"rahmanfaisal10/embrio4-service/pkg/response"
-	"strconv"
-	"strings"
+	"rahmanfaisal10/embrio4-service/pkg/util"
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
@@ -42,127 +41,103 @@ func (svc *service) ImportFileUploadDWH(destination string) *response.BaseRespon
 		}
 
 		//periode
-		dateParse, err := time.Parse(formatUpload, row[0])
+		periode, err := util.ParseStringToDate(layoutISO, row[0])
 		if err != nil {
 			log.Error(err)
 			return &response.BaseResponse{
 				Success: false,
-				Message: err.Error(),
-			}
-		}
-		oriDate := dateParse.Format("2006-01-02")
-		periode, err := time.Parse("2006-01-02", oriDate)
-		if err != nil {
-			log.Error(err)
-			return &response.BaseResponse{
-				Success: false,
-				Message: err.Error(),
+				Message: "failed to parse field periode from string to date",
 			}
 		}
 
 		//next payment date
-		dateParse, err = time.Parse(formatUpload, row[14])
+		nextPmtDate, err := util.ParseStringToDate(formatUpload, row[8])
 		if err != nil {
 			log.Error(err)
 			return &response.BaseResponse{
 				Success: false,
-				Message: err.Error(),
+				Message: "failed to parse field next_pmt_date from string to date",
 			}
 		}
-		oriDate = dateParse.Format("2006-01-02")
-		nextPmtDate, err := time.Parse("2006-01-02", oriDate)
+
+		//next int pmt date
+		nextIntPmtDate, err := util.ParseStringToDate(formatUpload, row[9])
 		if err != nil {
 			log.Error(err)
 			return &response.BaseResponse{
 				Success: false,
-				Message: err.Error(),
+				Message: "failed to parse field next_int_pmt_date from string to date",
+			}
+		}
+
+		//tgl menunggak
+		tglMenunggak, err := util.ParseStringToDate(formatUpload, row[11])
+		if err != nil {
+			log.Error(err)
+			return &response.BaseResponse{
+				Success: false,
+				Message: "failed to parse field tgl_menunggak from string to date",
 			}
 		}
 
 		//next realisasi
-		dateParse, err = time.Parse(formatUpload, row[18])
+		TglRealisasi, err := util.ParseStringToDate(formatUpload, row[12])
 		if err != nil {
 			log.Error(err)
 			return &response.BaseResponse{
 				Success: false,
-				Message: err.Error(),
-			}
-		}
-		oriDate = dateParse.Format("2006-01-02")
-		TglRealisasi, err := time.Parse("2006-01-02", oriDate)
-		if err != nil {
-			log.Error(err)
-			return &response.BaseResponse{
-				Success: false,
-				Message: err.Error(),
+				Message: "failed to parse field tgl_realisasi from string to date",
 			}
 		}
 
 		//jatuh tempo
-		dateParse, err = time.Parse(formatUpload, row[19])
-
+		tglJatuhTempo, err := util.ParseStringToDate(formatUpload, row[13])
 		if err != nil {
 			log.Error(err)
 			return &response.BaseResponse{
 				Success: false,
-				Message: err.Error(),
-			}
-		}
-		oriDate = dateParse.Format("2006-01-02")
-		TglJatuhTempo, err := time.Parse("2006-01-02", oriDate)
-		if err != nil {
-			log.Error(err)
-			return &response.BaseResponse{
-				Success: false,
-				Message: err.Error(),
-			}
-		}
-
-		//jangkaWaktu
-		stringJangkaWaktu := strings.ReplaceAll(row[20], "M", "")
-		jangkaWaktu, err := strconv.Atoi(stringJangkaWaktu)
-		if err != nil {
-			log.Error(err)
-			return &response.BaseResponse{
-				Success: false,
-				Message: err.Error(),
+				Message: "failed to parse field tgl_jatuh_tempo from string to date",
 			}
 		}
 
 		getData := &model.Upload{
 			Periode:                    periode,
-			Region:                     row[1],
-			Mainbranch:                 row[2],
-			Branch:                     row[3],
-			Currency:                   row[4],
-			NamaAO:                     row[5],
-			LNType:                     row[6],
-			NomorRekening:              row[7],
-			NamaDebitur:                row[8],
-			AlamatIdentitas:            row[9],
-			KodePosIdentitas:           row[10],
-			AlamatKantor:               row[11],
-			KodePosKantor:              row[12],
-			Plafond:                    row[13],
+			Branch:                     row[1],
+			Currency:                   row[2],
+			NamaAO:                     row[3],
+			LNType:                     row[4],
+			NomorRekening:              row[5],
+			NamaDebitur:                row[6],
+			Plafond:                    util.ParseStringToFloat(row[7]),
 			NextPmtDate:                nextPmtDate,
-			NextIntPmtDate:             row[15],
-			Rate:                       row[16],
-			TglMenunggak:               row[17],
+			NextIntPmtDate:             nextIntPmtDate,
+			Rate:                       float32(util.ParseStringToFloat(row[10])),
+			TglMenunggak:               tglMenunggak,
 			TglRealisasi:               TglRealisasi,
-			TglJatuhTempo:              TglJatuhTempo,
-			JangkaWaktu:                jangkaWaktu,
-			FlagRestruk:                row[21],
-			CIFNO:                      row[22],
-			KolektibilitasLancar:       row[23],
-			KolektibilitasDPK:          row[24],
-			KolektibilitasKurangLancar: row[25],
-			KolektibilitasDiragukan:    row[26],
-			KolektibilitasMacet:        row[27],
-			TunggakanPokok:             row[28],
-			TunggakanBunga:             row[29],
-			TunggakanPinalty:           row[30],
-			PNPengelola:                row[31],
-			NamaPengelola:              row[32],
+			TglJatuhTempo:              tglJatuhTempo,
+			JangkaWaktu:                row[14],
+			FlagRestruk:                row[15],
+			CIFNO:                      row[16],
+			KolektibilitasLancar:       util.ParseStringToFloat(row[17]),
+			KolektibilitasDPK:          util.ParseStringToFloat(row[18]),
+			KolektibilitasKurangLancar: util.ParseStringToFloat(row[19]),
+			KolektibilitasDiragukan:    util.ParseStringToFloat(row[20]),
+			KolektibilitasMacet:        util.ParseStringToFloat(row[21]),
+			TunggakanPokok:             util.ParseStringToFloat(row[22]),
+			TunggakanBunga:             util.ParseStringToFloat(row[23]),
+			TunggakanPinalty:           util.ParseStringToFloat(row[24]),
+			PNPengelola:                row[25],
+			NamaPengelola:              row[26],
+			Code:                       row[27],
+			Description:                row[28],
+			KolADK:                     int64(util.ParseStringToFloat(row[29])),
+			AvgOsHarian:                row[30],
+			KecamatanTempatTinggal:     row[31],
+			KelurahanTempatTinggal:     row[32],
+			KodePosTempatTinggal:       row[33],
+			KecamatanTempatUsaha:       row[34],
+			KelurahanTempatUsaha:       row[35],
+			KodePosTempatUsaha:         row[36],
 		}
 
 		uploadModel = append(uploadModel, getData)
@@ -177,50 +152,13 @@ func (svc *service) ImportFileUploadDWH(destination string) *response.BaseRespon
 	}
 
 	//list mantri
-	_, err = svc.r.GetAllMantri()
+	err = svc.r.InsertDashboard()
 	if err != nil {
-		log.Error(err)
 		return &response.BaseResponse{
 			Success: false,
 			Message: err.Error(),
 		}
 	}
-
-	// for _, v := range mantri {
-	// 	//execute query total os
-	// 	_, err := svc.r.QueryTotalOS(v.Kode)
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 		return &response.BaseResponse{
-	// 			Success: false,
-	// 			Message: err.Error(),
-	// 		}
-	// 	}
-
-	// 	//sisaSuplesi
-	// 	_, err = svc.r.QuerySisaSuplesi(v.Kode)
-	// 	if sql.ErrNoRows == err {
-	// 		err = nil
-	// 	}
-
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 		return &response.BaseResponse{
-	// 			Success: false,
-	// 			Message: err.Error(),
-	// 		}
-	// 	}
-
-	// 	//sisa lunas hutang
-	// 	_, err = svc.r.QueryRincianLunasHutang(v.Kode)
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 		return &response.BaseResponse{
-	// 			Success: false,
-	// 			Message: err.Error(),
-	// 		}
-	// 	}
-	// }
 
 	duration := time.Since(time.Now())
 	fmt.Println("done in", int(math.Ceil(duration.Seconds())), "seconds")

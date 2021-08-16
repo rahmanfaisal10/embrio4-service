@@ -5,6 +5,7 @@ import "time"
 type TotalOS struct {
 	Periode                       time.Time `json:"periode" db:"periode"`
 	TargetOs                      float64   `json:"target_os" db:"target_os"`
+	PNPengelola                   string    `json:"pn_pengelola" db:"pn_pengelola"`
 	Os                            float64   `json:"os" db:"os"`
 	PercentageOSAkhirTahun        float64   `json:"percentage_os_akhir_tahun" db:"percentage_os_akhir_tahun"`
 	MinimalDeltaNilai4            float64   `json:"minimal_delta_nilai_4" db:"minimal_delta_nilai_4"`

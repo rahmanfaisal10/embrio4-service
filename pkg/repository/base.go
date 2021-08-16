@@ -24,6 +24,11 @@ type Repository interface {
 	QueryRincianLunasHutang(mantri string) (sisaLunasHutang response.SisaLunasHutangResponse, err error)
 	GetAllMantri() (mantri []*model.Mantri, err error)
 	PencapaianRealisasi(mantri string) (pencapaianRealisasi float64, err error)
+	GetAllUpload() ([]*model.Upload, error)
+	InsertDashboard() error
+	UploadBulanSeblumnya(cif string) (*float64, error)
+	RincianLunasHutang(cif string) (*float64, error)
+	ViewDashboard(mantri string) (*response.ViewDashboard, error)
 }
 
 type repository struct {

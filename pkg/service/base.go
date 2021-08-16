@@ -12,6 +12,7 @@ type Service interface {
 	EmailVerificationService(request request.EmailVerificationRequest) *response.BaseResponse
 	ChangedPasswordService(request request.ChangePasswordRequest) *response.BaseResponse
 	ImportFileUploadDWH(destination string) *response.BaseResponse
+	ViewDashboardService(mantri string) *response.BaseResponse
 }
 
 type service struct {

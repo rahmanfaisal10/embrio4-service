@@ -35,6 +35,7 @@ func InitRouter(s service.Service) *echo.Echo {
 	authorizedRouter.POST("register", registerHandler(s))
 	authorizedRouter.PUT("change-password", changePasswordHandler(s))
 	authorizedRouter.POST("upload-file", uploadFileHandler(s))
+	authorizedRouter.GET("dashboard/:mantri", dashboardHandler(s))
 
 	return router
 }
