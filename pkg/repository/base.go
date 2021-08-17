@@ -13,11 +13,7 @@ type Repository interface {
 	UpdateLastLogin(user model.Users) error
 	CreateUser(user *model.Users) error
 	UpdatePassword(user model.Users) error
-	BulkUpsertCabang(tx *sql.Tx) error
-	BulkUpsertUnit(tx *sql.Tx) error
 	BUlkUpsertMantri(tx *sql.Tx) error
-	BUlkUpsertMisi(request []*model.Misi, tx *sqlx.Tx) error
-	BUlkUpsertNasabah(tx *sql.Tx) error
 	UploadRepository(request []*model.Upload) error
 	QueryTotalOS(mantri string) (totalOS response.TotalOS, err error)
 	QuerySisaSuplesi(mantri string) (sisaSuplesi response.SisaSuplesiResponse, err error)
@@ -29,6 +25,10 @@ type Repository interface {
 	UploadBulanSeblumnya(cif string) (*float64, error)
 	RincianLunasHutang(cif string) (*float64, error)
 	ViewDashboard(mantri string) (*response.ViewDashboard, error)
+	InsertSimpanan(request []*model.Simpanan) error
+	InsertLogTandai(request *model.LogTandai) error
+	ListDpkRepository(mantri string) ([]*response.ListDpkResponse, error)
+	MiniDashboardRepository(mantri string) ([]*response.MiniDashboardResponse, error)
 }
 
 type repository struct {

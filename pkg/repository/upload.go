@@ -23,12 +23,14 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 	smtfUpload := fmt.Sprintf(queryReset, upload.ID+1)
 	_, err := repo.db.Exec(smtfUpload)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 
 	//config transaction mode
 	tx, err := repo.db.Begin()
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 

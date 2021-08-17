@@ -13,6 +13,10 @@ type Service interface {
 	ChangedPasswordService(request request.ChangePasswordRequest) *response.BaseResponse
 	ImportFileUploadDWH(destination string) *response.BaseResponse
 	ViewDashboardService(mantri string) *response.BaseResponse
+	ImportFileSimpanan(destination string) *response.BaseResponse
+	InsertLogTandaiService(request *request.LogTandaiRequest) *response.BaseResponse
+	ListDpkService(mantri string) *response.BaseResponse
+	ListMiniDashboardService(mantri string) *response.BaseResponse
 }
 
 type service struct {

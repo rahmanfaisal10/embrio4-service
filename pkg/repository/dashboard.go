@@ -17,6 +17,7 @@ func (repo *repository) InsertDashboard() error {
 	//config transaction mode
 	tx, err := repo.db.Begin()
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 
@@ -111,7 +112,7 @@ func (repo *repository) InsertDashboard() error {
 		}
 
 		query := `INSERT INTO embrio4.dashboard
-		(periode, target_os, os_total, os_kupedes, os_kur, os_kur_supermi, os_gbt, sisa_suplesi, rincian_lunas_hutang, pencapaian_realisasi, dpk_total, dpk_kecil, dpk_baru, dpk_1, dpk_2, dpk_3, dpk_cnpl, dpk_blm_restruk, dpk_masih_GP, dpk_dalam_GP, lancar_blm_jth_tempo, npl_total, npl_kl_kecil, npl_kl_total, npl_diragukan_total, npl_macet, npl_belum_restruk, dh_total, ph_total, dh_pemasukan_tahunberjalan, dh_bersaldo_simpanan, dh_yg_mengangsur, simpanan_total, simpanan_topup_besar, simpanan_pengambilan_besar, simpanan_besar_tgl_lahir_bln_ini, restruk_os, restruk_dalam_grace_periode, Id_mantri, description, created_at, updated_at)
+		(periode, target_os, os_total, os_kupedes, os_kur, os_kur_supermi, os_gbt, sisa_suplesi, rincian_lunas_hutang, pencapaian_realisasi, dpk_total, dpk_kecil, dpk_baru, dpk_1, dpk_2, dpk_3, dpk_cnpl, dpk_blm_restruk, dpk_masih_GP, dpk_dalam_GP, lancar_blm_jth_tempo, npl_total, npl_kl_kecil, npl_kl_total, npl_diragukan_total, npl_macet, npl_belum_restruk, dh_total, ph_total, dh_pemasukan_tahunberjalan, dh_bersaldo_simpanan, dh_yg_mengangsur, simpanan_total, simpanan_topup_besar, simpanan_pengambilan_besar, simpanan_besar_tgl_lahir_bln_ini, restruk_os, restruk_dalam_grace_periode, Id_mantri, nomor_rekening, description, created_at, updated_at)
 		VALUES(
 			?, 
 			NULL, 
@@ -151,12 +152,13 @@ func (repo *repository) InsertDashboard() error {
 			NULL, 
 			NULL, 
 			NULL, 
+			?,
 			?, 
 			NULL, 
 			NOW(), 
 			NOW());`
 
-		_, err = tx.Exec(query, v.Periode, totalOS, osKupedes, kur, osKurSupermi, osGbt, sisaSuplesi, lunasHutang, pencapaianRealisasi, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk, v.PNPengelola)
+		_, err = tx.Exec(query, v.Periode, totalOS, osKupedes, kur, osKurSupermi, osGbt, sisaSuplesi, lunasHutang, pencapaianRealisasi, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk, v.PNPengelola, v.NomorRekening)
 		if err != nil {
 			tx.Rollback()
 			log.Error(err)

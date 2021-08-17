@@ -1,12 +1,9 @@
 package service
 
 import (
-	"fmt"
-	"math"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 	"rahmanfaisal10/embrio4-service/pkg/response"
 	"rahmanfaisal10/embrio4-service/pkg/util"
-	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/labstack/gommon/log"
@@ -145,23 +142,21 @@ func (svc *service) ImportFileUploadDWH(destination string) *response.BaseRespon
 
 	err = svc.r.UploadRepository(uploadModel)
 	if err != nil {
+		log.Error(err)
 		return &response.BaseResponse{
 			Success: false,
 			Message: err.Error(),
 		}
 	}
 
-	//list mantri
 	err = svc.r.InsertDashboard()
 	if err != nil {
+		log.Error(err)
 		return &response.BaseResponse{
 			Success: false,
 			Message: err.Error(),
 		}
 	}
-
-	duration := time.Since(time.Now())
-	fmt.Println("done in", int(math.Ceil(duration.Seconds())), "seconds")
 
 	return &response.BaseResponse{
 		Success: true,

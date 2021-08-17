@@ -41,16 +41,11 @@ func uploadFileHandler(service service.Service) func(c echo.Context) error {
 			return err
 		}
 
-		respo := service.ImportFileUploadDWH(dst.Name())
-		if !respo.Success {
-			respo.Success = false
-			respo.Message = err.Error()
+		resp = service.ImportFileUploadDWH(dst.Name())
+		if !resp.Success {
 			return c.JSON(http.StatusBadRequest, resp)
-		} else {
-			resp.Success = respo.Success
-			resp.Message = respo.Message
-			return c.JSON(http.StatusOK, resp)
 		}
 
+		return c.JSON(http.StatusOK, resp)
 	}
 }
