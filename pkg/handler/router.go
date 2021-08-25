@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"rahmanfaisal10/embrio4-service/config"
 	"rahmanfaisal10/embrio4-service/pkg/request"
 	"rahmanfaisal10/embrio4-service/pkg/service"
@@ -27,7 +28,9 @@ func InitRouter(s service.Service) *echo.Echo {
 
 	//router without authorization and authentication
 	router.POST("api/login", loginHandler(s))
-	// router.POST("api/v1/register", registerHandler(s))
+	router.GET("api", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, "Embrio4 server connected")
+	})
 
 	authorizedRouter := router.Group("/api/v1/")
 	authorizedRouter.Use(middleware.JWTWithConfig(middleWareConfig))
