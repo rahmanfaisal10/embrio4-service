@@ -48,12 +48,12 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 		}
 	}
 
-	err = repo.BUlkUpsertMantri(tx)
-	if err != nil {
-		tx.Rollback()
-		log.Error(err)
-		return err
-	}
+	// err = repo.BUlkUpsertMantri(tx)
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	log.Error(err)
+	// 	return err
+	// }
 
 	err = tx.Commit()
 	if err != nil {
