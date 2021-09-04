@@ -30,6 +30,7 @@ type Repository interface {
 	ListDpkRepository(mantri string) ([]*response.ListDpkResponse, error)
 	MiniDashboardRepository(mantri string) ([]*response.MiniDashboardResponse, error)
 	GetAllMantriFromUpload() ([]response.RegisterHelperResponse, error)
+	GetBelumJatuhTempo(mantri string) (*response.GetAllJatuhTempoResponse, error)
 }
 
 type repository struct {

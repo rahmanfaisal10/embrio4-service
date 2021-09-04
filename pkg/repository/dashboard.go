@@ -228,3 +228,18 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 
 	return response, nil
 }
+
+func (repo *repository) GetBelumJatuhTempo(mantri string) (*response.GetAllJatuhTempoResponse, error) {
+	query := `SELECT SUM(d3.lancar_blm_jth_tempo)as dpk_total, COUNT(d3.lancar_blm_jth_tempo) as count, 'belum jatuh tempo' as status FROM dashboard d3 
+	WHERE 
+		d3.lancar_blm_jth_tempo != 0 AND
+		d3.Id_mantri = ?;`
+
+	response := new(response.GetAllJatuhTempoResponse)
+	err := repo.db.Get(response, query, mantri)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	return response, nil
+}
