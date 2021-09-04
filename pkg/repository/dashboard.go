@@ -23,7 +23,7 @@ func (repo *repository) InsertDashboard() error {
 
 	for _, v := range upload {
 		totalOS := (v.KolektibilitasDPK + v.KolektibilitasDiragukan + v.KolektibilitasKurangLancar + v.KolektibilitasLancar + v.KolektibilitasMacet)
-		var pencapaianRealisasi, osKupedes, kur, osKurSupermi, osGbt, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk float64
+		var pencapaianRealisasi, osKupedes, kur, osKurSupermi, osGbt, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk, phTotal float64
 		thenMonth := v.Periode.AddDate(0, -1, 0)
 		umurTunggakan := (v.Periode.Sub(*v.NextPmtDate).Hours() / 24)
 
@@ -91,6 +91,10 @@ func (repo *repository) InsertDashboard() error {
 			NplPosisi = (v.KolektibilitasDPK + v.KolektibilitasDiragukan + v.KolektibilitasKurangLancar + v.KolektibilitasLancar + v.KolektibilitasMacet)
 		}
 
+		if umurTunggakan > 270 {
+			phTotal = (v.KolektibilitasDPK + v.KolektibilitasDiragukan + v.KolektibilitasKurangLancar + v.KolektibilitasLancar + v.KolektibilitasMacet)
+		}
+
 		if umurTunggakan > 90 && umurTunggakan <= (90+float64(v.Periode.Day())) {
 			nplKLKecil = (v.KolektibilitasKurangLancar + v.KolektibilitasDiragukan + v.KolektibilitasMacet)
 		}
@@ -142,7 +146,7 @@ func (repo *repository) InsertDashboard() error {
 			?, 
 			?, 
 			NULL, 
-			NULL, 
+			?, 
 			NULL, 
 			NULL, 
 			NULL, 
@@ -158,7 +162,7 @@ func (repo *repository) InsertDashboard() error {
 			NOW(), 
 			NOW());`
 
-		_, err = tx.Exec(query, v.Periode, totalOS, osKupedes, kur, osKurSupermi, osGbt, sisaSuplesi, lunasHutang, pencapaianRealisasi, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk, v.PNPengelola, v.NomorRekening)
+		_, err = tx.Exec(query, v.Periode, totalOS, osKupedes, kur, osKurSupermi, osGbt, sisaSuplesi, lunasHutang, pencapaianRealisasi, totalDpk, dpkBaru, dpkSatu, dpkDua, dpkTiga, dpkTiga, dpkFlagRestruk, lancar, NplPosisi, nplKLKecil, nplKL, nplDiragukan, nplMacet, nplRestruk, phTotal, v.PNPengelola, v.NomorRekening)
 		if err != nil {
 			tx.Rollback()
 			log.Error(err)
