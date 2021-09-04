@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"rahmanfaisal10/embrio4-service/config"
 	"rahmanfaisal10/embrio4-service/pkg/model"
@@ -41,10 +42,17 @@ func (s *service) RegisterService(tokenReq string) error {
 
 	for _, v := range PNPengelola {
 		//checking data is exist on database
-		user, _ := s.r.GetUserByUsernamePN(v.PnPengelola)
+		user, err := s.r.GetUserByUsernamePN(v.PnPengelola)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				err = nil
+			} else {
+				return err
+			}
+		}
+
 		if user != nil {
-			err := errors.New("username_pn does exists, please using another username_pn")
-			return err
+			continue
 		}
 
 		//generate from request password
