@@ -178,11 +178,11 @@ func (repo *repository) InsertDashboard() error {
 
 func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, error) {
 	response := new(response.ViewDashboard)
-	query := `SELECT
+	query := `SELECT DISTINCT 
 					COALESCE(ts.total_os,0) as target_os,
 					d3.pencapaian_os,
 					COALESCE(((ts.total_os * 116/100)-d3.pencapaian_os)/(12-MONTH(CURDATE())+1),0) as minimal_delta_nilai_4,
-					(case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as SIGNED) else 0 end) as angsuran_pokok_belum_masuk,
+					u.angsuran_pokok_belum_masuk,
 					d3.pencapaian_realisasi as pencapaian_realisasi,
 					d3.sisa_suplesi as sisa_suplesi,
 					d3.rincian_lunas_hutang as rincian_lunas_hutang,
@@ -217,9 +217,18 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 					(select count(d.npl_belum_restruk) from dashboard d WHERE d.npl_belum_restruk != 0 and d.Id_mantri = ? AND d.periode = (SELECT max(m.periode) from dashboard m)) as count_npl_belum_restruk
 					FROM dashboard d
 				join target_smk ts on ts.pn = d.Id_mantri
-				join upload u on d.Id_mantri = u.pn_pengelola
+				join 
+					(
+						SELECT 
+							u.pn_pengelola,
+							(case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as int) else 0 end) as angsuran_pokok_belum_masuk
+						FROM upload u
+						group by u.pn_pengelola 
+					) u
+				on d.Id_mantri = u.pn_pengelola
 				join (SELECT 
 					d2.Id_mantri, 
+					d2.periode,
 					SUM(d2.os_total) as pencapaian_os, 
 					SUM(d2.pencapaian_realisasi) as pencapaian_realisasi,
 					SUM(d2.sisa_suplesi) as sisa_suplesi,
@@ -241,7 +250,7 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 					SUM(d2.npl_diragukan_total) as npl_diragukan_total,
 					SUM(d2.npl_macet) as npl_macet,
 					SUM(d2.npl_belum_restruk) as npl_belum_restruk
-				from dashboard d2 group by d2.Id_mantri, d2.periode) d3 on d3.Id_mantri = d.Id_mantri 
+				from dashboard d2 group by d2.Id_mantri, d2.periode) d3 on d3.Id_mantri = d.Id_mantri and d3.periode = d.periode 
 				WHERE d.Id_mantri = ? AND
 				d.periode = (SELECT max(m.periode) from dashboard m);`
 
