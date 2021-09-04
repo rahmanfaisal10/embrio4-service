@@ -14,10 +14,12 @@ func (repo *repository) ListDpkRepository(mantri string) ([]*response.ListDpkRes
 				GROUP_CONCAT(s.available_balance) as available_balance,
 				u.next_pmt_date,
 				u.flag_restruk,
+				d.os_total as baki_debit,
 				u.ln_type,
+				(u.tunggakan_bunga + u.tunggakan_pokok) as billing, 
 				u.nomor_rekening,
 				GROUP_CONCAT(s.account_number) as account_number,
-				COALESCE(lt.status,'') as status 
+				COALESCE(lt.status,'') as status
 			FROM upload u , simpanan s, dashboard d
 			LEFT JOIN log_tandai lt 
 				ON lt.pn_pengguna = d.Id_mantri AND lt.nomor_rekening_pinjaman = d.nomor_rekening 
