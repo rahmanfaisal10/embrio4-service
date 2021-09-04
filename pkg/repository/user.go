@@ -30,8 +30,8 @@ func (r *repository) UpdateLastLogin(user model.Users) error {
 }
 
 func (r *repository) CreateUser(user *model.Users) error {
-	query := `INSERT INTO users(username_pn, password, nama, unit_kerja, kode_branch, jabatan, created_at, created_by, updated_at, updated_by, last_login, groupss, phone_number)
-			VALUES ( :username_pn, :password, :nama, :unit_kerja, :kode_branch, :jabatan, NOW(), 'admin', NOW(), 'admin', :last_login, :groups, :phone_number);`
+	query := `INSERT INTO users(username_pn, password, nama, unit_kerja, kode_branch, jabatan, created_at, created_by, updated_at, updated_by, last_login, groupsss, phone_number)
+			VALUES ( :username_pn, :password, :nama, :unit_kerja, :kode_branch, :jabatan, NOW(), 'admin', NOW(), 'admin', :last_login, :groupsss, :phone_number);`
 
 	_, err := r.db.NamedExec(query, user)
 	if err != nil {

@@ -182,7 +182,7 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 			SUM(COALESCE(ts.total_os,0)) as target_os,
 			SUM(d.os_total) as pencapaian_os,
 			SUM(COALESCE(((ts.total_os * 116/100)-d.os_total)/(12-MONTH(CURDATE())+1),0)) as minimal_delta_nilai_4,
-			SUM((case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as int) else 0 end)) as angsuran_pokok_belum_masuk,
+			SUM((case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as SIGNED) else 0 end)) as angsuran_pokok_belum_masuk,
 			SUM(d.pencapaian_realisasi) as pencapaian_realisasi,
 			SUM(d.sisa_suplesi) as sisa_suplesi,
 			SUM(d.rincian_lunas_hutang) as rincian_lunas_hutang,
