@@ -29,6 +29,7 @@ type Repository interface {
 	InsertLogTandai(request *model.LogTandai) error
 	ListDpkRepository(mantri string) ([]*response.ListDpkResponse, error)
 	MiniDashboardRepository(mantri string) ([]*response.MiniDashboardResponse, error)
+	GetAllMantriFromUpload() ([]response.RegisterHelperResponse, error)
 }
 
 type repository struct {

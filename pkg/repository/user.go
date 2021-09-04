@@ -3,7 +3,11 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"rahmanfaisal10/embrio4-service/pkg/model"
+	"rahmanfaisal10/embrio4-service/pkg/response"
+
+	"github.com/labstack/gommon/log"
 )
 
 func (r *repository) GetUserByUsernamePN(usernamePN string) (*model.Users, error) {
@@ -44,4 +48,18 @@ func (r *repository) UpdatePassword(user model.Users) error {
 		return err
 	}
 	return nil
+}
+
+func (r *repository) GetAllMantriFromUpload() ([]response.RegisterHelperResponse, error) {
+	query := `SELECT DISTINCT u.pn_pengelola, u.nama_pengelola, u.branch FROM upload u WHERE u.pn_pengelola != ''`
+	pnPengelola := make([]response.RegisterHelperResponse, 0)
+
+	err := r.db.Select(&pnPengelola, query)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	fmt.Println(pnPengelola)
+	return pnPengelola, nil
 }
