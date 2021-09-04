@@ -33,7 +33,7 @@ func (s *service) LoginService(req request.LoginRequest) (*response.LoginRespons
 		ID:             strconv.Itoa(user.ID),
 		UsernamePN:     user.UsernamePN,
 		Nama:           user.Nama,
-		Groups:         user.Groups,
+		Groups:         user.Groupsss,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 8).Unix()},
 	}
 

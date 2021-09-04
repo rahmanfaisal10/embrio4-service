@@ -15,6 +15,6 @@ type Users struct {
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 	UpdatedBy   string    `json:"updated_by" db:"updated_by"`
 	LastLogin   time.Time `json:"last_login" db:"last_login"`
-	Groups      string    `json:"groups" db:"groups"`
+	Groupsss    string    `json:"groupsss" db:"groupsss"`
 	PhoneNumber string    `json:"phone_number" db:"phone_number"`
 }
