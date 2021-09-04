@@ -221,7 +221,7 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 					(
 						SELECT 
 							u.pn_pengelola,
-							(case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as int) else 0 end) as angsuran_pokok_belum_masuk
+							(case when u.next_pmt_date >= u.Periode then u.Plafond / CAST(TRIM(BOTH 'M' FROM u.jangka_waktu) as signed) else 0 end) as angsuran_pokok_belum_masuk
 						FROM upload u
 						group by u.pn_pengelola 
 					) u
