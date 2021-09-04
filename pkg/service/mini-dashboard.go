@@ -49,9 +49,20 @@ func (service *service) ListMiniDashboardService(mantri string) *response.BaseRe
 	minidashboardResponse.PrognosaDpk = minidashboardResponse.PosisiDPK - minidashboardResponse.DpkJanjiStor - minidashboardResponse.DpkObAgf + minidashboardResponse.DpkTidakBayar + minidashboardResponse.DpkBelumJatuhTempo
 	minidashboardResponse.CountPrognosaDpk = minidashboardResponse.CountPosisiDPK - minidashboardResponse.CountDpkJanjiStor - minidashboardResponse.CountDpkObAgf - +minidashboardResponse.CountDpkTidakBayar + minidashboardResponse.CountDpkBelumJatuhTempo
 
+	minidashboardResponse.PercenDpkBelumJatuhTempo = percen(float64(getAllJatuhTempo.Count), float64(getAllJatuhTempo.CountTotal))
+	minidashboardResponse.PercenDpkJanjiStor = percen(minidashboardResponse.DpkJanjiStor, minidashboardResponse.PosisiDPK)
+	minidashboardResponse.PercenDpkObAgf = percen(minidashboardResponse.DpkObAgf, minidashboardResponse.PosisiDPK)
+	minidashboardResponse.PercenDpkTidakBayar = percen(minidashboardResponse.DpkTidakBayar, minidashboardResponse.PosisiDPK)
+	minidashboardResponse.PercenPosisiDPK = percen(minidashboardResponse.PosisiDPK, minidashboardResponse.PosisiDPK)
+	minidashboardResponse.PercenPrognosaDpk = percen(float64(minidashboardResponse.CountPrognosaDpk), getAllJatuhTempo.DpkTotal)
+
 	return &response.BaseResponse{
 		Success: true,
 		Message: "successfully to list dpk",
 		Data:    minidashboardResponse,
 	}
+}
+
+func percen(pembilang, penyebut float64) float64 {
+	return pembilang / penyebut * 100
 }

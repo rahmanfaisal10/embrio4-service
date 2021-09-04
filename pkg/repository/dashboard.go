@@ -230,7 +230,7 @@ func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, e
 }
 
 func (repo *repository) GetBelumJatuhTempo(mantri string) (*response.GetAllJatuhTempoResponse, error) {
-	query := `SELECT SUM(d3.lancar_blm_jth_tempo)as dpk_total, COUNT(d3.lancar_blm_jth_tempo) as count, 'belum jatuh tempo' as status FROM dashboard d3 
+	query := `SELECT SUM(d3.lancar_blm_jth_tempo)as dpk_total, (SELECT count(*) FROM dashboard d) as count_total, COUNT(d3.lancar_blm_jth_tempo) as count, 'belum jatuh tempo' as status FROM dashboard d3 
 	WHERE 
 		d3.lancar_blm_jth_tempo != 0 AND
 		d3.Id_mantri = ?;`
