@@ -34,6 +34,7 @@ func (s *service) LoginService(req request.LoginRequest) (*response.LoginRespons
 		UsernamePN:     user.UsernamePN,
 		Nama:           user.Nama,
 		Groups:         user.Groupsss,
+		Branch:         user.KodeBranch,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * 8).Unix()},
 	}
 

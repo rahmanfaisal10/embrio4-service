@@ -12,5 +12,6 @@ type JwtCustomClaims struct {
 	UsernamePN string `json:"username_pn"`
 	Nama       string `json:"nama"`
 	Groups     string `json:"groups"`
+	Branch     string `json:"branch"`
 	jwt.StandardClaims
 }

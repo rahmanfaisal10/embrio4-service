@@ -5,6 +5,7 @@ import (
 	"rahmanfaisal10/embrio4-service/config"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/gommon/log"
@@ -58,6 +59,7 @@ func (s *service) RegisterService(tokenReq string) error {
 			Password:   string(password),
 			Nama:       v.NamaPengelola,
 			KodeBranch: v.Branch,
+			LastLogin:  time.Now(),
 		}
 
 		err = s.r.CreateUser(newUser)
