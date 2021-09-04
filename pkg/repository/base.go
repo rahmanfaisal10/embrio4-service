@@ -22,7 +22,7 @@ type Repository interface {
 	PencapaianRealisasi(mantri string) (pencapaianRealisasi float64, err error)
 	GetAllUpload() ([]*model.Upload, error)
 	InsertDashboard() error
-	UploadBulanSeblumnya(cif string) (*float64, error)
+	UploadBulanSeblumnya(cif, nomorRekening string) (*float64, error)
 	RincianLunasHutang(cif string) (*float64, error)
 	ViewDashboard(mantri string) (*response.ViewDashboard, error)
 	InsertSimpanan(request []*model.Simpanan) error

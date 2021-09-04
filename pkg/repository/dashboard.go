@@ -31,7 +31,7 @@ func (repo *repository) InsertDashboard() error {
 			pencapaianRealisasi = v.Plafond
 		}
 
-		sisaSuplesi, err := repo.UploadBulanSeblumnya(v.CIFNO)
+		sisaSuplesi, err := repo.UploadBulanSeblumnya(v.CIFNO, v.NomorRekening)
 		if err != nil {
 			log.Error(err)
 			return err

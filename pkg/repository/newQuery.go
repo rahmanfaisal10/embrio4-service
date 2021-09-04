@@ -81,15 +81,15 @@ func (repo *repository) GetAllUpload() ([]*model.Upload, error) {
 	return upload, nil
 }
 
-func (repo *repository) UploadBulanSeblumnya(cif string) (*float64, error) {
+func (repo *repository) UploadBulanSeblumnya(cif, nomorRekening string) (*float64, error) {
 	sisaSuplesi := new(float64)
 	query := `SELECT
 				(u2.kolektibilitas_lancar + u2.kolektibilitas_dpk +u2.kolektibilitas_kurang_lancar +u2.kolektibilitas_diragukan +u2.kolektibilitas_macet) as sisa_os
 			FROM upload u2 
 			WHERE
-				u2.Periode = last_day(DATE_SUB((SELECT max(u.periode) from upload u), interval 1 month)) and u2.cif_no = ?`
+				u2.Periode = last_day(DATE_SUB((SELECT max(u.periode) from upload u), interval 1 month)) and u2.cif_no = ? and u2.nomor_rekening != ?`
 
-	err := repo.db.Get(sisaSuplesi, query, cif)
+	err := repo.db.Get(sisaSuplesi, query, cif, nomorRekening)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return sisaSuplesi, nil
