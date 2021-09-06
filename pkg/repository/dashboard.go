@@ -182,7 +182,8 @@ func (repo *repository) InsertDashboard() error {
 
 func (repo *repository) ViewDashboard(mantri string) (*response.ViewDashboard, error) {
 	response := new(response.ViewDashboard)
-	query := `SELECT DISTINCT 
+	query := `SELECT DISTINCT
+					d3.periode,
 					COALESCE(ts.total_os,0) as target_os,
 					d3.pencapaian_os,
 					COALESCE(((ts.total_os * 116/100)-d3.pencapaian_os)/(12-MONTH(CURDATE())+1),0) as minimal_delta_nilai_4,
