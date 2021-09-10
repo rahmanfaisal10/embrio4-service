@@ -31,6 +31,7 @@ type Repository interface {
 	MiniDashboardRepository(mantri string) ([]*response.MiniDashboardResponse, error)
 	GetAllMantriFromUpload() ([]response.RegisterHelperResponse, error)
 	GetBelumJatuhTempo(mantri string) (*response.GetAllJatuhTempoResponse, error)
+	InsertTarget() error
 }
 
 type repository struct {

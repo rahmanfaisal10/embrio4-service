@@ -43,6 +43,7 @@ func InitRouter(s service.Service) *echo.Echo {
 	authorizedRouter.POST("tandai-activity", insertTandaiHandler(s))
 	authorizedRouter.GET("list-dpk/:mantri", listDpkHandler(s))
 	authorizedRouter.GET("minidashboard/:mantri", miniDashboardHandler(s))
+	authorizedRouter.POST("target-insert", targetInsertHandler(s))
 
 	return router
 }

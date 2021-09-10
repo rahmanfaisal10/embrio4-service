@@ -17,6 +17,7 @@ type Service interface {
 	InsertLogTandaiService(request *request.LogTandaiRequest) *response.BaseResponse
 	ListDpkService(mantri string) *response.BaseResponse
 	ListMiniDashboardService(mantri string) *response.BaseResponse
+	InsertAutoTarget(token string) *response.BaseResponse
 }
 
 type service struct {
