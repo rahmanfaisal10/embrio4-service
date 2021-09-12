@@ -9,6 +9,7 @@ import (
 func (repo *repository) ListDpkRepository(mantri string) ([]*response.ListDpkResponse, error) {
 	response := make([]*response.ListDpkResponse, 0)
 	query := `SELECT
+				u.periode,
 				u.nama_debitur,
 				u.kelurahan_tempat_tinggal as alamat,
 				GROUP_CONCAT(s.available_balance) as available_balance,

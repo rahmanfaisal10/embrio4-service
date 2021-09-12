@@ -28,6 +28,7 @@ func (service *service) ListMiniDashboardService(mantri string) *response.BaseRe
 	minidashboardResponse := new(response.MiniDashboardsResponse)
 
 	for _, v := range miniDashboard {
+		minidashboardResponse.Periode = v.Periode
 		switch v.Status {
 		case "janji setor":
 			minidashboardResponse.DpkJanjiStor = v.DpkTotal

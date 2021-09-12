@@ -8,7 +8,8 @@ import (
 
 func (repo *repository) MiniDashboardRepository(mantri string) ([]*response.MiniDashboardResponse, error) {
 	response := make([]*response.MiniDashboardResponse, 0)
-	query := `SELECT 
+	query := `SELECT
+				d.periode, 
 				SUM(d.dpk_total) as dpk_total,
 				COALESCE(lt.status, '') as status,
 				COUNT(*) as count
