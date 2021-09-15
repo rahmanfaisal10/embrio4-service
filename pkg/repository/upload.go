@@ -1,8 +1,11 @@
 package repository
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"rahmanfaisal10/embrio4-service/pkg/model"
+	"time"
 
 	"github.com/labstack/gommon/log"
 )
@@ -38,6 +41,12 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 
 	query := fmt.Sprintf(queryInsert, "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 
+	fmt.Println(request[0].Periode)
+	err = repo.GetUploadByPeriode(request[0].Periode)
+	if err != nil {
+		return err
+	}
+
 	for _, row := range request {
 		vals := []interface{}{row.Periode, row.Branch, row.Currency, row.NamaAO, row.LNType, row.NomorRekening, row.NamaDebitur, row.Plafond, row.NextPmtDate, row.NextIntPmtDate, row.Rate, row.TglMenunggak, row.TglRealisasi, row.TglJatuhTempo, row.JangkaWaktu, row.FlagRestruk, row.CIFNO, row.KolektibilitasLancar, row.KolektibilitasDPK, row.KolektibilitasKurangLancar, row.KolektibilitasDiragukan, row.KolektibilitasMacet, row.TunggakanPokok, row.TunggakanBunga, row.TunggakanPinalty, row.PNPengelola, row.NamaPengelola, row.Code, row.Description, row.KolADK, row.AvgOsHarian, row.KecamatanTempatTinggal, row.KelurahanTempatTinggal, row.KodePosTempatTinggal, row.KecamatanTempatUsaha, row.KelurahanTempatUsaha, row.KodePosTempatUsaha}
 		_, err = tx.Exec(query, vals...)
@@ -63,4 +72,19 @@ func (repo *repository) UploadRepository(request []*model.Upload) error {
 	}
 
 	return nil
+}
+
+func (repo *repository) GetUploadByPeriode(periode *time.Time) error {
+	query := `SELECT periode FROM upload WHERE periode = ?`
+
+	err := repo.db.Get(periode, query, periode)
+	if err != nil {
+		log.Error(err)
+		if err == sql.ErrNoRows {
+			return nil
+		}
+		return err
+	}
+
+	return errors.New("periode ini sudah ada, jangan di upload lagi")
 }

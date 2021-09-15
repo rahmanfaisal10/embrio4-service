@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"rahmanfaisal10/embrio4-service/pkg/model"
 	"rahmanfaisal10/embrio4-service/pkg/response"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -32,6 +33,7 @@ type Repository interface {
 	GetAllMantriFromUpload() ([]response.RegisterHelperResponse, error)
 	GetBelumJatuhTempo(mantri string) (*response.GetAllJatuhTempoResponse, error)
 	InsertTarget() error
+	GetUploadByPeriode(periode *time.Time) error
 }
 
 type repository struct {

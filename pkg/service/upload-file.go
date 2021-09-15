@@ -15,11 +15,8 @@ const (
 	formatUpload = "02/01/2006"
 )
 
-var (
-	uploadModel = make([]*model.Upload, 0)
-)
-
 func (svc *service) ImportFileUploadDWH(destination string) *response.BaseResponse {
+	uploadModel := make([]*model.Upload, 0)
 	xlsx, err := excelize.OpenFile(destination)
 	if err != nil {
 		log.Error(err)
